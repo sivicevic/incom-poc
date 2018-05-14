@@ -1,0 +1,7 @@
+hr\incom\common\domain\model\Naknada.class
+hr\incom\common\domain\model\PorezOstalo.class
+hr\incom\common\domain\model\enums\NacinPlacanja.class
+hr\incom\common\domain\model\Racun.class
+hr\incom\common\domain\model\enums\OznakaSlijednosti.class
+hr\incom\common\domain\model\IncomEntity.class
+hr\incom\common\domain\model\Porez.class

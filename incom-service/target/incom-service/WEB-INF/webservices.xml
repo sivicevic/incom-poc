@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webservices xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/javaee_web_services_1_4.xsd"
+	version="1.4">
+	<webservice-description>
+		<webservice-description-name>test</webservice-description-name>
+		<port-component>
+			<port-component-name>test</port-component-name>
+			<service-endpoint-interface>hr.incom.service.IIntegrationWS</service-endpoint-interface>
+			<service-impl-bean>
+				<servlet-link>hr.incom.service.IntegrationWS</servlet-link>
+			</service-impl-bean>
+		</port-component>
+	</webservice-description>
+</webservices>
