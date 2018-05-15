@@ -1358,3 +1358,35 @@ java.io.FileNotFoundException: C:\Users\user\.tooling\gradle\versions.json (Acce
 2018-05-15 10:00:06,025 [Worker-32] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 6 resources
 2018-05-15 10:00:06,031 [Worker-32] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
 2018-05-15 10:00:06,036 [Worker-32] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\fiskal\incom-common\src\test\resources
+2018-05-15 11:54:40,601 [Worker-18] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-05-15 11:54:41,133 [Worker-18] ERROR c.g.t.t.d.PublishedGradleVersions - Cannot write Gradle version information cache file.
+java.io.FileNotFoundException: C:\Users\user\.tooling\gradle\versions.json (Access is denied)
+	at java.io.FileOutputStream.open0(Native Method) ~[na:1.8.0_171]
+	at java.io.FileOutputStream.open(FileOutputStream.java:270) ~[na:1.8.0_171]
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213) ~[na:1.8.0_171]
+	at com.google.common.io.Files$FileByteSink.openStream(Files.java:245) ~[com.google.guava_15.0.0.v201403281430.jar:na]
+	at com.google.common.io.Files$FileByteSink.openStream(Files.java:233) ~[com.google.guava_15.0.0.v201403281430.jar:na]
+	at com.google.common.io.ByteSink$AsCharSink.openStream(ByteSink.java:158) ~[com.google.guava_15.0.0.v201403281430.jar:na]
+	at com.google.common.io.CharSource.copyTo(CharSource.java:138) ~[com.google.guava_15.0.0.v201403281430.jar:na]
+	at com.gradleware.tooling.toolingutils.distribution.PublishedGradleVersions.storeCacheVersionsFile(PublishedGradleVersions.java:194) [com.gradleware.tooling.utils_0.19.4.v20171108133209.jar:na]
+	at com.gradleware.tooling.toolingutils.distribution.PublishedGradleVersions.tryToDownloadAndCacheVersions(PublishedGradleVersions.java:160) [com.gradleware.tooling.utils_0.19.4.v20171108133209.jar:na]
+	at com.gradleware.tooling.toolingutils.distribution.PublishedGradleVersions.tryToUpdateOutdatedVersionsFile(PublishedGradleVersions.java:143) [com.gradleware.tooling.utils_0.19.4.v20171108133209.jar:na]
+	at com.gradleware.tooling.toolingutils.distribution.PublishedGradleVersions.create(PublishedGradleVersions.java:127) [com.gradleware.tooling.utils_0.19.4.v20171108133209.jar:na]
+	at org.eclipse.buildship.core.util.gradle.PublishedGradleVersionsWrapper$LoadVersionsJob.run(PublishedGradleVersionsWrapper.java:66) [org.eclipse.buildship.core_2.2.1.v20180125-1441.jar:na]
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56) [org.eclipse.core.jobs_3.9.3.v20180115-1757.jar:na]
+2018-05-15 11:54:52,079 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:52,089 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2018-05-15 11:54:52,091 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:52,097 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2018-05-15 11:54:52,807 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:52,813 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2018-05-15 11:54:52,815 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:52,822 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\fiskal\incom-backend\src\test\resources
+2018-05-15 11:54:53,317 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:53,323 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\fiskal\incom-service\src\main\resources
+2018-05-15 11:54:53,325 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:53,331 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\fiskal\incom-service\src\test\resources
+2018-05-15 11:54:54,451 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:54,458 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\fiskal\incom-service\src\main\resources
+2018-05-15 11:54:54,465 [Worker-15] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2018-05-15 11:54:54,472 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\fiskal\incom-service\src\test\resources

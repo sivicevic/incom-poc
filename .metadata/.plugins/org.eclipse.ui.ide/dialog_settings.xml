@@ -3,4 +3,6 @@
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
 		<item value="C:\fiskal"/>
 	</list>
+	<section name="NewWizardAction">
+	</section>
 </section>
