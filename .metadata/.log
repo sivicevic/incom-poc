@@ -1196,3 +1196,22 @@ org.eclipse.jgit.errors.NotSupportedException: remote does not support smart HTT
 	at org.eclipse.egit.core.op.PushOperation.run(PushOperation.java:189)
 	at org.eclipse.egit.ui.internal.push.ConfirmationPage$2.run(ConfirmationPage.java:209)
 	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:119)
+
+!ENTRY org.eclipse.egit.core 4 0 2018-05-15 15:27:49.336
+!MESSAGE An exception occurred during push on URI https://sasa.ivicevic@app.serengetitech.com/git/fiskalizacija/: An internal Exception occurred during push: remote does not support smart HTTP push
+!STACK 0
+org.eclipse.jgit.api.errors.JGitInternalException: Exception caught during execution of push command
+	at org.eclipse.jgit.api.PushCommand.call(PushCommand.java:194)
+	at org.eclipse.egit.core.op.PushOperation.run(PushOperation.java:215)
+	at org.eclipse.egit.ui.internal.push.PushJob.performJob(PushJob.java:84)
+	at org.eclipse.egit.ui.internal.jobs.RepositoryJob.run(RepositoryJob.java:57)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+Caused by: org.eclipse.jgit.errors.NotSupportedException: remote does not support smart HTTP push
+	at org.eclipse.jgit.transport.TransportHttp.openPush(TransportHttp.java:445)
+	at org.eclipse.jgit.transport.PushProcess.execute(PushProcess.java:160)
+	at org.eclipse.jgit.transport.Transport.push(Transport.java:1344)
+	at org.eclipse.jgit.api.PushCommand.call(PushCommand.java:169)
+	... 4 more
+
+!ENTRY org.eclipse.egit.ui 4 0 2018-05-15 15:27:49.344
+!MESSAGE Can't connect to any repository: https://sasa.ivicevic@app.serengetitech.com/git/fiskalizacija/ (An internal Exception occurred during push: remote does not support smart HTTP push)
