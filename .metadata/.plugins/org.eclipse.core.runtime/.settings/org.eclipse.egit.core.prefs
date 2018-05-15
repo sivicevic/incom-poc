@@ -1,3 +1,5 @@
-GitRepositoriesView.GitDirectories=
-GitRepositoriesView.GitDirectories.relative=
+GitRepositoriesView.GitDirectories=C\:\\fiskal\\.git;
+GitRepositoriesView.GitDirectories.relative=.git;
+RepositorySearchDialogSearchPath=C\:\\fiskal
+core_preferredMergeStrategy=jgit-default-mergeStrategy
 eclipse.preferences.version=1
