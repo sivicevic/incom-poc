@@ -26,6 +26,7 @@ public class Integration implements IIntegration
 		Document doc = null;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
+		message = message.replaceAll("\n", "");
 		try
 		{
 			doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(message.getBytes()));
@@ -37,11 +38,11 @@ public class Integration implements IIntegration
 
 		boolean result = DigitalSignatureUtils.isValid(doc);
 
-		information.storeInvoice();
+		//information.storeInvoice();
 
 		//System.out.println("Testiram");
 
-		return "test2"; // + result;
+		return String.valueOf(result); // + result;
 	}
 
 }

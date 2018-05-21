@@ -41,6 +41,12 @@
         <dependent-module archiveName="hibernate-commons-annotations-5.0.1.Final.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/hibernate/common/hibernate-commons-annotations/5.0.1.Final/hibernate-commons-annotations-5.0.1.Final.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="ojdbc8-12.1.0.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/oracle/jdbc/ojdbc8/12.1.0.1/ojdbc8-12.1.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ucp-12.1.0.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/oracle/jdbc/ucp/12.1.0.1/ucp-12.1.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="incom-service-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/incom-service/incom-service">
             <dependency-type>uses</dependency-type>
         </dependent-module>

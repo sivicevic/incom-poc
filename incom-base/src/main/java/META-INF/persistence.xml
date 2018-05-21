@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	<persistence-unit name="incom-base2">
+	<persistence-unit name="incom" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		<jta-data-source>jdbc/incomDS</jta-data-source>
 		
-		<class>hr.incom.common.domain.model.Racun</class>
-		<class>hr.incom.common.domain.model.Naknada</class>
-		<class>hr.incom.common.domain.model.Porez</class>
-		<class>hr.incom.common.domain.model.PorezOstalo</class>
-		<class>hr.incom.common.domain.model.IncomEntity</class>
+		<class>hr.incom.common.domain.model.old.IncomEntity</class>
+		<class>hr.incom.common.domain.model.old.Naknada</class>
+		<class>hr.incom.common.domain.model.old.Porez</class>
+		<class>hr.incom.common.domain.model.old.PorezOstalo</class>
+		<class>hr.incom.common.domain.model.old.Racun</class>
+		<class>hr.incom.common.domain.model.Invoice</class>
+		<class>hr.incom.common.domain.model.InvoiceItems</class>
+		<class>hr.incom.common.domain.model.InvoiceXml</class>
+		<class>hr.incom.common.domain.model.Errors</class>
 		
 		<properties>
-			<!-- <property name="hibernate.physical_naming_strategy" value="hr.niko.as.common.hibernate.strategy.PhysicalNamingStrategyImpl" 
-				/> -->
-			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" 
-				/> -->
-			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-			<property name="hibernate.show_sql" value="true" />
-<!-- 			<property name="hibernate.cache.use_second_level_cache" value="false"/> -->
-			<!-- <property name="hibernate.format_sql" value="true" /> -->
-<!-- 			<property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
-<!-- 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/> -->
-<!-- 			<property name="javax.persistence.schema-generation.scripts.create-target" value="incom.sql"/> -->
-<!-- 			<property name="javax.persistence.schema-generation.scripts.action" value="create"/> -->
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:ora" />
+            <property name="javax.persistence.jdbc.user" value="opr" />
+            <property name="javax.persistence.jdbc.password" value="Salekoliko1" />
+            <property name="hibernate.connection.pool_size" value="1"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="show_sql" value="true"/>
+			<property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
 		</properties>
 	</persistence-unit>
 </persistence>
