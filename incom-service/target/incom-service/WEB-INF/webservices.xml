@@ -4,9 +4,9 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/javaee_web_services_1_4.xsd"
 	version="1.4">
 	<webservice-description>
-		<webservice-description-name>test</webservice-description-name>
+		<webservice-description-name>soap-test</webservice-description-name>
 		<port-component>
-			<port-component-name>test</port-component-name>
+			<port-component-name>soap-test</port-component-name>
 			<service-endpoint-interface>hr.incom.service.IIntegrationWS</service-endpoint-interface>
 			<service-impl-bean>
 				<servlet-link>hr.incom.service.IntegrationWS</servlet-link>

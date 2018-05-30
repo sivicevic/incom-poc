@@ -1,7 +1,12 @@
-hr\incom\common\domain\model\Naknada.class
-hr\incom\common\domain\model\PorezOstalo.class
+src\main\java\util\HibernateUtil.class
+hr\incom\common\domain\model\old\Racun.class
+hr\incom\common\domain\model\InvoiceXml.class
 hr\incom\common\domain\model\enums\NacinPlacanja.class
-hr\incom\common\domain\model\Racun.class
+hr\incom\common\domain\model\old\PorezOstalo.class
+hr\incom\common\domain\model\Invoice.class
+hr\incom\common\domain\model\old\Naknada.class
+hr\incom\common\domain\model\old\Porez.class
 hr\incom\common\domain\model\enums\OznakaSlijednosti.class
-hr\incom\common\domain\model\IncomEntity.class
-hr\incom\common\domain\model\Porez.class
+hr\incom\common\domain\model\InvoiceItems.class
+hr\incom\common\domain\model\Errors.class
+hr\incom\common\domain\model\old\IncomEntity.class

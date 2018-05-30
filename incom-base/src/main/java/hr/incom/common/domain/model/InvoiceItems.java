@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +21,7 @@ public class InvoiceItems implements Serializable {
 	private long invoiceItemId;
 	
 	// Cash Payment Invoice ID FK
-	@Column(name="INVOICE_CP_ID")
+	@Column(name="INVOICE_CP_ID", insertable=false, updatable=false)
 	private long invoiceCpId;
 	
 	// Code of invoice fee
@@ -37,6 +39,11 @@ public class InvoiceItems implements Serializable {
 	// Fee Amount
 	@Column(name="FEE_AMT")
 	private double feeAmount;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="INVOICE_CP_ID", nullable=false)
+	private Invoice invoice;
 
 	public long getInvoiceItemId() {
 		return invoiceItemId;

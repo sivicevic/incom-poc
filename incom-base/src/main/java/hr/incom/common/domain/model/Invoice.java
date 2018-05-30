@@ -1,11 +1,17 @@
 package hr.incom.common.domain.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -16,7 +22,9 @@ public class Invoice implements Serializable {
 	
 	// Unique Identifier of Cash Payment Invoice. The value is artificially generated as a sequence.
 	@Id
-	@Column(name="INVOICE_CP_ID")
+	@SequenceGenerator(name="invoiceId_generator", sequenceName = "INVOICEID_SEQ", allocationSize=50)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceId_generator")
+	@Column(name="INVOICE_CP_ID", updatable = false, nullable = false)
 	private long invoiceId;
 	
 	// UUID - Universally unique identifier
@@ -29,15 +37,15 @@ public class Invoice implements Serializable {
 	
 	// Date and time of receiving XML message ( dd.mm.yyyy hh24:mi:ss:msec - level milisecond )
 	@Column(name="DATE_RECEIVED")
-	private Date dateReceived;
+	private LocalDateTime dateReceived;
 	
 	// Date and time of responce of  XML message ( dd.mm.yyyy hh24:mi:ss:msec - level milisecond )
 	@Column(name="DATE_RESPONCE")
-	private Date dateResponce;
+	private LocalDateTime dateResponce;
 	
 	// Date and time od DB insert ( dd.mm.yyyy hh24:mi:ss:msec - level milisecond )
 	@Column(name="DATE_DB_INSERT")
-	private Date dateDBInsert;
+	private LocalDateTime dateDBInsert;
 	
 	// Taxpayer account
 	@Column(name="TXPYR_NUMBER")
@@ -52,7 +60,7 @@ public class Invoice implements Serializable {
 	private int vatObligation;
 	
 	// Invoice number sequence indicator
-	@Column(name="VAT_OBLIG")
+	@Column(name="INVOICE_SEQ_IND")
 	private char invoiceSeqIndicator;
 	
 	// Invoice number index
@@ -118,6 +126,8 @@ public class Invoice implements Serializable {
 	// Has errors in ICM_CP_XML_ERROR_LIST table
 	@Column(name="HAS_ERRORS")
 	private String hasErrors;
+	
+	
 
 	public long getInvoiceId() {
 		return invoiceId;
@@ -143,28 +153,28 @@ public class Invoice implements Serializable {
 		this.dateIssued = dateIssued;
 	}
 
-	public Date getDateReceived() {
+	public LocalDateTime getDateReceived() {
 		return dateReceived;
 	}
 
-	public void setDateReceived(Date dateReceived) {
+	public void setDateReceived(LocalDateTime dateReceived) {
 		this.dateReceived = dateReceived;
 	}
 
-	public Date getDateResponce() {
+	public LocalDateTime getDateResponce() {
 		return dateResponce;
 	}
 
-	public void setDateResponce(Date dateResponce) {
+	public void setDateResponce(LocalDateTime dateResponce) {
 		this.dateResponce = dateResponce;
 	}
 
-	public Date getDateDBInsert() {
+	public LocalDateTime getDateDBInsert() {
 		return dateDBInsert;
 	}
 
-	public void setDateDBInsert(Date dateDBInsert) {
-		this.dateDBInsert = dateDBInsert;
+	public void setDateDBInsert(LocalDateTime localDateTime) {
+		this.dateDBInsert = localDateTime;
 	}
 
 	public String getTaxPayerNumber() {

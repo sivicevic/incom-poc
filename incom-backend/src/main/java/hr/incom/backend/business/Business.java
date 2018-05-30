@@ -4,7 +4,7 @@ import javax.ejb.Stateless;
 
 import org.w3c.dom.Document;
 
-import hr.incom.backend.helper.DigitalSignatureUtils;
+import hr.incom.backend.helper.DigitalSignatureVerify;
 
 @Stateless
 public class Business
@@ -13,10 +13,10 @@ public class Business
 	{
 		boolean isValid = false;
 
-		Document doc = DigitalSignatureUtils.readDocument("InputMessage.xml");
+		Document doc = DigitalSignatureVerify.readDocument("InputMessage.xml");
 		try
 		{
-			isValid = DigitalSignatureUtils.isValid(doc);
+			isValid = DigitalSignatureVerify.isValid(doc);
 		}
 		catch (Exception e)
 		{
