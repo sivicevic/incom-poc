@@ -3,6 +3,7 @@
 	<name>incom-backend-ear</name>
 	<comment></comment>
 	<projects>
+		<project>incom-common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

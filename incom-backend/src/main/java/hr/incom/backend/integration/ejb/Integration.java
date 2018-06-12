@@ -22,6 +22,10 @@ public class Integration implements IIntegration
 	private IInformation information;
 	
 	public static final String FILE_PATH = "D:\\fiskalFiles\\";
+	public static final String ORIGIN_FILE_PATH = "D:\\fiskalFiles\\unsigned\\";
+	public static final String DESTINATION_FILE_PATH = "D:\\fiskalFiles\\signed\\";
+	public static final String DESTINATION_FILE_PATH2 = "D:\\fiskalFiles\\signed2\\";
+	public static final String KEYS_PATH = "C:\\fiskal\\incom-common\\src\\main\\resources\\keys\\";
 
 	@Override
 	public String processCashPayment(String message) throws Exception
@@ -40,18 +44,12 @@ public class Integration implements IIntegration
 
 		boolean result = DigitalSignatureVerify.isValid(doc);
 
-		//information.storeInvoice();
-
-		//System.out.println("Testiram");
-
-		return String.valueOf(result); // + result;
+		return String.valueOf(result);
 	}
 
 	@Override
 	public String processFile(String file, String key) throws Exception {
-		
-		boolean isValid = false;
-						
+		boolean isValid = false;		
 		try
 		{
 			isValid = DigitalSignatureVerify.isValid(file, key);
@@ -60,7 +58,21 @@ public class Integration implements IIntegration
 		{
 			throw new Exception("Unable to validate file");
 		}
-
+		return String.valueOf(isValid);
+	}
+	
+	@Override
+	public String processInvoice(Document doc) throws Exception {
+		boolean isValid = false;	
+		String publicKeyPath = KEYS_PATH + "publickey.key";
+		try
+		{
+			isValid = DigitalSignatureVerify.isValid(doc, publicKeyPath);
+		}
+		catch (Exception e)
+		{
+			throw new Exception("Unable to validate file");
+		}
 		return String.valueOf(isValid);
 	}
 

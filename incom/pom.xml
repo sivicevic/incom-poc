@@ -10,6 +10,7 @@
   	<module>../incom-backend</module>
   	<module>../incom-service</module>
   	<module>../incom-base</module>
+  	<module>../incom-common</module>
   </modules>
   <dependencyManagement>
   	<dependencies>

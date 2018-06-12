@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ICM_CP_XML_ERROR_LIST")
+//@Table(name="ICM_CP_XML_ERROR_LIST")
 public class Errors implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

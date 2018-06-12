@@ -9,7 +9,10 @@ import java.security.KeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.UUID;
+
 import javax.xml.crypto.MarshalException;
 import javax.xml.crypto.dsig.CanonicalizationMethod;
 import javax.xml.crypto.dsig.DigestMethod;
@@ -119,6 +122,10 @@ public class DigitalSignatureGenerate {
             String destnSignedXmlFilePath, String privateKeyFilePath, String publicKeyFilePath) {
         //Get the XML Document object
         Document doc = getXmlDocument(originalXmlFilePath);
+        
+        //Create unique data for each xml file
+        createUniqueXmlIdentificators(doc);
+        
         //Create XML Signature Factory
         XMLSignatureFactory xmlSigFactory = XMLSignatureFactory.getInstance("DOM");
         PrivateKey privateKey = new DigitalSignatureUtil().getStoredPrivateKey(privateKeyFilePath);
@@ -130,7 +137,7 @@ public class DigitalSignatureGenerate {
                     Collections.singletonList(xmlSigFactory.newTransform(Transform.ENVELOPED,
                     (TransformParameterSpec) null)), null, null);
             signedInfo = xmlSigFactory.newSignedInfo(
-                    xmlSigFactory.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE,
+                    xmlSigFactory.newCanonicalizationMethod(CanonicalizationMethod.EXCLUSIVE,
                     (C14NMethodParameterSpec) null),
                     xmlSigFactory.newSignatureMethod(SignatureMethod.RSA_SHA1, null),
                     Collections.singletonList(ref));
@@ -151,8 +158,44 @@ public class DigitalSignatureGenerate {
         } catch (XMLSignatureException ex) {
             ex.printStackTrace();
         }
-        //Store the digitally signed document inta a location
+        //Store the digitally signed document into a location
         storeSignedDoc(doc, destnSignedXmlFilePath);
     }
+    
+    
+    public void generateXMLFiles(String fullPathOrigin, String fullPathDestination) { 
+    	 //Get the XML Document object
+        Document doc = getXmlDocument(fullPathOrigin);
+        createUniqueXmlIdentificators(doc);
+        
+        //Store the digitally signed document into a location
+        storeSignedDoc(doc, fullPathDestination);
+    }
+
+	private void createUniqueXmlIdentificators(Document doc) {
+		UUID uuid = UUID.randomUUID();
+        LocalDateTime time = LocalDateTime.now();
+        
+        doc.getElementsByTagName("tns:IdPoruke").item(0).getFirstChild().setNodeValue(uuid.toString());
+        doc.getElementsByTagName("tns:DatumVrijeme").item(0).getFirstChild().setNodeValue(time.toString());
+        doc.getElementsByTagName("tns:DatVrijeme").item(0).getFirstChild().setNodeValue(time.toString());
+	}
+	
+	public static Document readDocument(String path)
+	{
+		Document doc = null;
+
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		try
+		{
+			doc = dbf.newDocumentBuilder().parse(new FileInputStream(path));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		return doc;
+	}
 }
 

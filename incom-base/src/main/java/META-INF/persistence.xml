@@ -4,17 +4,17 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>hr.incom.common.domain.model.Invoice</class>
 		<class>hr.incom.common.domain.model.InvoiceItems</class>
-		<class>hr.incom.common.domain.model.InvoiceXml</class>
-		<class>hr.incom.common.domain.model.Errors</class>
+<!-- 		<class>hr.incom.common.domain.model.InvoiceXml</class> -->
+<!-- 		<class>hr.incom.common.domain.model.Errors</class> -->
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:ora" />
-            <property name="javax.persistence.jdbc.user" value="opr" />
-            <property name="javax.persistence.jdbc.password" value="Salekoliko1" />
-            <property name="hibernate.connection.pool_size" value="1"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@ed2s-scan.osc.uk.oracle.com:1521/pdb1" />
+            <property name="javax.persistence.jdbc.user" value="SASA" />
+            <property name="javax.persistence.jdbc.password" value="welcome1" />
+            <property name="hibernate.connection.pool_size" value="10"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect" />
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="show_sql" value="true"/>
 			<property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
 		</properties>

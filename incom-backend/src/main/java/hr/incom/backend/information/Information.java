@@ -11,7 +11,7 @@ import src.main.java.util.HibernateUtil;
 public class Information implements IInformation
 {
 	@Override
-    public void insertIntoInvoice(String xmlFilePath) {
+    public void prepareInsertFromString(String xmlFilePath) {
         
     	DigitalSignatureGenerate generateSignature = new DigitalSignatureGenerate();
     	HibernateUtil hybernateUtil = new HibernateUtil();
@@ -19,7 +19,19 @@ public class Information implements IInformation
     	
     	doc = generateSignature.getXmlDocument(xmlFilePath);
     	
-    	String oib = doc.getElementsByTagName("tns:Oib").item(0).getFirstChild().getNodeValue();
+    	insertInvoice(hybernateUtil, doc);
+    }
+	
+	@Override
+    public void prepareInsertFromDoc(Document doc) {
+        
+    	HibernateUtil hybernateUtil = new HibernateUtil();
+    	
+    	insertInvoice(hybernateUtil, doc);
+    }
+
+	private void insertInvoice(HibernateUtil hybernateUtil, Document doc) {
+		String oib = doc.getElementsByTagName("tns:Oib").item(0).getFirstChild().getNodeValue();
     	int vatObligation = doc.getElementsByTagName("tns:USustPdv").item(0).getFirstChild().getNodeValue().equalsIgnoreCase("true") ? 1 : 0 ;
     	char invoiceSeqIndicator = doc.getElementsByTagName("tns:OznSlijed").item(0).getFirstChild().getNodeValue().charAt(0);
     	String paragInvLabel = doc.getElementsByTagName("tns:ParagonBrRac").item(0).getFirstChild().getNodeValue();
@@ -30,5 +42,5 @@ public class Information implements IInformation
     	
     	//TODO: insert invoice into database
     	hybernateUtil.createInvoice(oib, vatObligation, invoiceSeqIndicator, paragInvLabel, paymentMethod, specPurpose, totalAmount);
-    }
+	}
 }

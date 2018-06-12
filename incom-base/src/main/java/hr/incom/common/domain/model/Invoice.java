@@ -3,14 +3,12 @@ package hr.incom.common.domain.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -22,9 +20,11 @@ public class Invoice implements Serializable {
 	
 	// Unique Identifier of Cash Payment Invoice. The value is artificially generated as a sequence.
 	@Id
-	@SequenceGenerator(name="invoiceId_generator", sequenceName = "INVOICEID_SEQ", allocationSize=50)
+	/*@SequenceGenerator(name="invoiceId_generator", sequenceName = "INVOICEID_SEQ", allocationSize=100)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceId_generator")
-	@Column(name="INVOICE_CP_ID", updatable = false, nullable = false)
+	@Column(name="INVOICE_CP_ID", updatable = false, nullable = false)*/
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="INVOICE_CP_ID")
 	private long invoiceId;
 	
 	// UUID - Universally unique identifier

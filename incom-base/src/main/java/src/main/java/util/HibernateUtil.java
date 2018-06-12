@@ -1,15 +1,17 @@
 package src.main.java.util;
 
-import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import hr.incom.common.domain.model.Invoice;
 
@@ -18,7 +20,7 @@ public class HibernateUtil
 {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("incom");
 
-    
+  
     /**
      * Create a new Invoice.
      * 
@@ -33,7 +35,7 @@ public class HibernateUtil
             transaction = manager.getTransaction();
             // Begin the transaction
             transaction.begin();
-
+        	
             // Create a new Invoice object
             Invoice invoice = new Invoice();
             invoice.setDateDBInsert(LocalDateTime.now());
