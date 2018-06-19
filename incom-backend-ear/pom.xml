@@ -11,10 +11,6 @@
 	<packaging>ear</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>hr.incom</groupId>
 			<artifactId>incom-backend</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

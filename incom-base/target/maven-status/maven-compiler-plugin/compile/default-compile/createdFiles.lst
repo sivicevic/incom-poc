@@ -1,4 +1,4 @@
-src\main\java\util\HibernateUtil.class
+hr\incom\common\procedures\InsertInvoice.class
 hr\incom\common\domain\model\InvoiceXml.class
 hr\incom\common\domain\model\enums\NacinPlacanja.class
 hr\incom\common\domain\model\Invoice.class

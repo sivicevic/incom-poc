@@ -3,12 +3,13 @@ package hr.incom.service.rest;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -22,19 +23,18 @@ import org.w3c.dom.Document;
 
 import hr.incom.backend.helper.DigitalSignatureGenerate;
 import hr.incom.backend.helper.DigitalSignatureVerify;
-import hr.incom.backend.information.Information;
 import hr.incom.backend.integration.ejb.interfaces.IIntegration;
 
 public class RestUtil {
 	
-	public static final String ORIGIN_FILE_PATH = "\\incom-service\\resource\\unsigned\\";
-	public static final String DESTINATION_FILE_PATH = "\\incom-service\\resource\\signed\\";
-	public static final String DESTINATION_FILE_PATH2 = "\\incom-service\\resource\\signed2\\";
-	public static final String KEYS_PATH = "\\incom-service\\resource\\keys\\";
+	public static final String ORIGIN_FILE_PATH = "./tmp/fiskalFiles/unsigned/";
+	public static final String DESTINATION_FILE_PATH = "./tmp/fiskalFiles/signed/";
+	public static final String SERVER_FILE_PATH = "/home/oracle/Oracle/Middleware/Oracle_Home/user_projects/domains/base_domain/tmp/fiskalFiles/signed/";
+	public static final String DESTINATION_FILE_PATH2 = "./tmp/fiskalFiles/signed2/";
+	public static final String KEYS_PATH = "./tmp/keys/";
 	
 	DigitalSignatureGenerate generateSignature = new DigitalSignatureGenerate();
 	
-	@EJB
 	private IIntegration integration = new IIntegration() {
 		
 		@Override
@@ -104,7 +104,6 @@ public class RestUtil {
 	
 	public long processMessage(String type, int i)
 	{
-		Information information = new Information();
 		String response = "";
 		StringBuilder stringBuilder = new StringBuilder();
 		LocalDateTime pocetak;
@@ -119,14 +118,14 @@ public class RestUtil {
 		
 		pocetak = LocalDateTime.now();
 		
-    	validateSignature(information, response, pocetak, fullPathDestination, publicKeyPath);
+    	validateSignature(response, pocetak, fullPathDestination, publicKeyPath);
     	
     	return measureTimeInMilis(pocetak);
 		
 	}
 	
-
-	private Response validateSignature(Information information, String response, LocalDateTime pocetak,
+	
+	private Response validateSignature(String response, LocalDateTime pocetak,
 			String fullPathDestination, String publicKeyPath) {
 		try
 		{
@@ -153,10 +152,20 @@ public class RestUtil {
 		return Math.abs(duration.toMillis());
 	}
 	
-	public ArrayList<String> getXMLFilesAsString() {
+	public ArrayList<String> getXMLFilesAsString(String serverIP) {
 	    List<String> aList = new ArrayList<String>();
+	    File folder;
+	    URI link = null;
 	    
-	    File folder = new File(DESTINATION_FILE_PATH);
+	    if (serverIP != null) {
+	    	String fullPath = "http:/\\/\\"+serverIP+SERVER_FILE_PATH;
+	    	folder = new File(fullPath);
+	    }
+	    else { 
+	    	folder = new File(DESTINATION_FILE_PATH); 
+	    }
+	    
+	    
 	    
 	    File[] files = folder.listFiles();
 	    for (File pf : files) {

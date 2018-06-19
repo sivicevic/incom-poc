@@ -174,12 +174,20 @@ public class DigitalSignatureGenerate {
 
 	private void createUniqueXmlIdentificators(Document doc) {
 		UUID uuid = UUID.randomUUID();
+		UUID jir = UUID.randomUUID();
         LocalDateTime time = LocalDateTime.now();
         
         doc.getElementsByTagName("tns:IdPoruke").item(0).getFirstChild().setNodeValue(uuid.toString());
         doc.getElementsByTagName("tns:DatumVrijeme").item(0).getFirstChild().setNodeValue(time.toString());
-        doc.getElementsByTagName("tns:DatVrijeme").item(0).getFirstChild().setNodeValue(time.toString());
+        
+        if (doc.getElementsByTagName("tns:DatVrijeme") != null) {
+        	doc.getElementsByTagName("tns:DatVrijeme").item(0).getFirstChild().setNodeValue(time.toString());
+        }
+        if (doc.getElementsByTagName("tns:Jir") != null) {
+        	doc.getElementsByTagName("tns:Jir").item(0).getFirstChild().setNodeValue(jir.toString());
+        }
 	}
+	
 	
 	public static Document readDocument(String path)
 	{

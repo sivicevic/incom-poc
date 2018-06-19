@@ -5,6 +5,7 @@ import java.io.File;
 
 import javax.ejb.EJB;
 import javax.ejb.Local;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -15,17 +16,15 @@ import hr.incom.backend.information.IInformation;
 import hr.incom.backend.integration.ejb.interfaces.IIntegration;
 
 @Stateless
-@Local
+@LocalBean
 public class Integration implements IIntegration
 {
-	@EJB
-	private IInformation information;
 	
-	public static final String FILE_PATH = "D:\\fiskalFiles\\";
-	public static final String ORIGIN_FILE_PATH = "D:\\fiskalFiles\\unsigned\\";
-	public static final String DESTINATION_FILE_PATH = "D:\\fiskalFiles\\signed\\";
-	public static final String DESTINATION_FILE_PATH2 = "D:\\fiskalFiles\\signed2\\";
-	public static final String KEYS_PATH = "C:\\fiskal\\incom-common\\src\\main\\resources\\keys\\";
+	public static final String FILE_PATH = "./tmp/";
+	public static final String ORIGIN_FILE_PATH = "./tmp/fiskalFiles/unsigned/";
+	public static final String DESTINATION_FILE_PATH = "./tmp/fiskalFiles/signed/";
+	public static final String DESTINATION_FILE_PATH2 = "./tmp/fiskalFiles/signed2/";
+	public static final String KEYS_PATH = "./tmp/keys/";
 
 	@Override
 	public String processCashPayment(String message) throws Exception
