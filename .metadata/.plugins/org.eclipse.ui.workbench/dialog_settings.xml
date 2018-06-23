@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="WorkbenchPreferenceDialogSettings">
-		<item value="660" key="DIALOG_X_ORIGIN"/>
-		<item value="148" key="DIALOG_Y_ORIGIN"/>
+		<item value="315" key="DIALOG_X_ORIGIN"/>
+		<item value="69" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.preferences.keysPreferencePage">
+		<item value="true" key="actionSetFilter"/>
+		<item value="true" key="uncategorizedFilter"/>
+		<item value="true" key="internalFilter"/>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
 		<item value="-1" key="dialogHeight"/>
@@ -17,6 +22,11 @@
 		</list>
 	</section>
 	<section name="NewWizardAction">
+		<item value="org.eclipse.m2e.core.wizards.Maven2ProjectWizard" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
+		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.jboss.ide.eclipse.ui.wizards"/>
+			<item value="org.eclipse.m2e"/>
+		</list>
 	</section>
 	<section name="ImportExportAction">
 		<item value="org.eclipse.jst.j2ee.internal.wizard.EARComponentExportWizard" key="ImportExportPage.STORE_SELECTED_EXPORT_WIZARD_ID"/>

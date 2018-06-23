@@ -1,10 +1,10 @@
-package hr.incom.service.rest;
+package hr.incom.shared.helper;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,25 +19,31 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import hr.incom.backend.helper.DigitalSignatureGenerate;
-import hr.incom.backend.helper.DigitalSignatureVerify;
-import hr.incom.backend.integration.ejb.interfaces.IIntegration;
+import hr.incom.shared.integration.ejb.interfaces.IIntegration;
+
 
 public class RestUtil {
 	
 	public static final String ORIGIN_FILE_PATH = "./tmp/fiskalFiles/unsigned/";
 	public static final String DESTINATION_FILE_PATH = "./tmp/fiskalFiles/signed/";
+	//public static final String DESTINATION_FILE_PATH_LOCAL = "D:\\weblogic.Server\\tmp\\fiskalFiles\\signed"; // FIXME Change path when clinet is in cloud!
+	public static final String DESTINATION_FILE_PATH_LOCAL = "./tmp/fiskalFiles/signed/"; // FIXME Change path when clinet is in cloud!
 	public static final String SERVER_FILE_PATH = "/home/oracle/Oracle/Middleware/Oracle_Home/user_projects/domains/base_domain/tmp/fiskalFiles/signed/";
 	public static final String DESTINATION_FILE_PATH2 = "./tmp/fiskalFiles/signed2/";
 	public static final String KEYS_PATH = "./tmp/keys/";
+	public static final String RESPONSE_FILE_PATH = "./tmp/fiskalFiles/response/";
+	public static final String DESTINATION_FILE_PATH_RESPONSE = "./tmp/fiskalFiles/response/signed/";
+	
+	//private static final Logger LOG = LoggerFactory.getLogger(RestUtil.class);
 	
 	DigitalSignatureGenerate generateSignature = new DigitalSignatureGenerate();
 	
 	private IIntegration integration = new IIntegration() {
 		
-		@Override
 		public String processFile(String fullPath, String keyPath) throws Exception {
 			boolean isValid = false;		
 			try
@@ -52,7 +58,6 @@ public class RestUtil {
 		}
 		
 
-		@Override
 		public String processCashPayment(String message) throws Exception {
 
 			Document doc = null;
@@ -70,7 +75,6 @@ public class RestUtil {
 			return String.valueOf(result); // + result;
 		}
 		
-		@Override
 		public String processInvoice(Document doc) throws Exception {
 			boolean isValid = false;
 			String publicKeyPath = KEYS_PATH + "publickey.key";
@@ -102,6 +106,49 @@ public class RestUtil {
 
 	}
 	
+	public String createResponse(long id)
+	{
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Response-" + id + ".xml");
+		String fileName = stringBuilder.toString();
+		String fullPathOrigin = RESPONSE_FILE_PATH + "Response.xml";
+		String fullPathDestination = DESTINATION_FILE_PATH_RESPONSE + fileName;
+		String privateKeyPath = KEYS_PATH + "privatekey.key";
+		String publicKeyPath = KEYS_PATH + "publickey.key";
+		System.out.println(fileName);
+		generateSignature.generateXMLDigitalSignature(fullPathOrigin, fullPathDestination, privateKeyPath, publicKeyPath);
+		
+		return fullPathDestination;
+
+	}
+	
+	public String validateResponseXml(String responsePath) {
+		String jir = null;
+		boolean valid;
+		String publicKeyPath = KEYS_PATH + "publickey.key";
+		
+		Document doc = generateSignature.getXmlDocument(responsePath);
+		
+		try {
+			valid = DigitalSignatureVerify.isValid(doc, publicKeyPath);
+			
+			if(valid) {
+				jir = doc.getElementsByTagName("tns:Jir").item(0).getFirstChild().getNodeValue();
+			}
+			else {
+				jir = "INVALID";
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return jir;
+	}
+	
+
 	public long processMessage(String type, int i)
 	{
 		String response = "";
@@ -183,7 +230,7 @@ public class RestUtil {
 	public ArrayList<Document> getXMLFilesAsDoc() {
 	    List<Document> aList = new ArrayList<Document>();
 	    
-	    File folder = new File(DESTINATION_FILE_PATH);
+	    File folder = new File(DESTINATION_FILE_PATH_LOCAL);
 	    
 	    File[] files = folder.listFiles();
 	    for (File pf : files) {
@@ -195,6 +242,27 @@ public class RestUtil {
 	      }
 	    }
 	    return (ArrayList<Document>) aList;
+	  }
+	
+	public Document getXMLFileAsDoc(int i) {
+		
+		String workingDir = System.getProperty("user.dir");
+		
+	    File f = new File(workingDir + "/signed" + "/Invoice-" + i + ".xml");
+	    
+	    System.out.println("File: " + f.toString());
+	    
+	      if (f.isFile() && getFileExtensionName(f).indexOf("xml") != -1) {
+	    	  return generateSignature.getXmlDocument(f.toString());
+	      }
+	      else {
+	    	  f = new File(workingDir + "/target/signed" + "/Invoice-" + i + ".xml");
+	    	  if (f.isFile() && getFileExtensionName(f).indexOf("xml") != -1) {
+		    	  return generateSignature.getXmlDocument(f.toString());
+		      }
+	      }
+	      
+	      return null;
 	  }
 
 	  public static String getFileExtensionName(File f) {

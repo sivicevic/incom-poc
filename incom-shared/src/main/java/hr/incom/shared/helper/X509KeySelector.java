@@ -1,4 +1,5 @@
-package hr.incom.backend.helper;
+package hr.incom.shared.helper;
+
 
 import java.security.Key;
 import java.security.PublicKey;

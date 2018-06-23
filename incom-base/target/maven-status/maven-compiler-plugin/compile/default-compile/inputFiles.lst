@@ -3,5 +3,6 @@ C:\fiskal\incom-base\src\main\java\hr\incom\common\procedures\InsertInvoice.java
 C:\fiskal\incom-base\src\main\java\hr\incom\common\domain\model\enums\NacinPlacanja.java
 C:\fiskal\incom-base\src\main\java\hr\incom\common\domain\model\Invoice.java
 C:\fiskal\incom-base\src\main\java\hr\incom\common\domain\model\InvoiceXml.java
+C:\fiskal\incom-base\src\main\java\hr\incom\common\procedures\InsertInvoiceFlat.java
 C:\fiskal\incom-base\src\main\java\hr\incom\common\domain\model\InvoiceItems.java
 C:\fiskal\incom-base\src\main\java\hr\incom\common\domain\model\Errors.java

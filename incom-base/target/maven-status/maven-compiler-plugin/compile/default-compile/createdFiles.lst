@@ -1,7 +1,0 @@
-hr\incom\common\procedures\InsertInvoice.class
-hr\incom\common\domain\model\InvoiceXml.class
-hr\incom\common\domain\model\enums\NacinPlacanja.class
-hr\incom\common\domain\model\Invoice.class
-hr\incom\common\domain\model\enums\OznakaSlijednosti.class
-hr\incom\common\domain\model\InvoiceItems.class
-hr\incom\common\domain\model\Errors.class

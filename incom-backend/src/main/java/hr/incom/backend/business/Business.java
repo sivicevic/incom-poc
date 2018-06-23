@@ -4,8 +4,8 @@ import javax.ejb.Stateless;
 
 import org.w3c.dom.Document;
 
-import hr.incom.backend.helper.DigitalSignatureGenerate;
-import hr.incom.backend.helper.DigitalSignatureVerify;
+import hr.incom.shared.helper.DigitalSignatureGenerate;
+import hr.incom.shared.helper.DigitalSignatureVerify;
 
 @Stateless
 public class Business

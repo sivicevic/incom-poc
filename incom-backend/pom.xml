@@ -32,6 +32,11 @@
 			<artifactId>incom-base</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>hr.incom</groupId>
+			<artifactId>incom-shared</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
   <build>

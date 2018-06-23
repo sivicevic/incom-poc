@@ -15,19 +15,37 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import hr.incom.shared.helper.RestUtil;
+
 
 public class InsertInvoice {
+	
+	RestUtil util = new RestUtil();
+	private static InsertInvoice instance;
+	
+	private Connection conn;
+	
+	public static InsertInvoice getInstance() {
+	    if(instance == null) {
+	        synchronized(InsertInvoice.class) {
+	            if(instance == null) {
+	            	instance = new InsertInvoice();
+	            }
+	        }
+	    }
+	    return instance;
+	}
+	
+	private InsertInvoice() {
+		this.conn = this.prepareConnection();
+	}
 
 	public Connection prepareConnection() {
 		Connection conn = null;
-
+		System.out.println("Prepare connection!");
 		String URL = "jdbc:oracle:thin:@ed2s-scan.osc.uk.oracle.com:1521/pdb1";
-		String USER = "SASA";
+		String USER = "TRN_V2";
 		String PASS = "welcome1";
-		
-/*		String URL = "jdbc:oracle:thin:@localhost:1521:ora";
-		String USER = "opr";
-		String PASS = "Salekoliko1";*/
 				
 		try {
 			   Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -46,21 +64,20 @@ public class InsertInvoice {
 	 }
 	
 	
-	public void InsertIntoInvoice(Document doc, Connection conn) {
+	public String InsertIntoInvoice(Document doc, String xml) {
 		
 		CallableStatement statement = null;
-		
-		UUID uuid = UUID.randomUUID();
+		String responseXml = null;
 		Date today = new Date();
 		int id;
 		
 		try {
-			statement = conn.prepareCall("{call pr_insert_invoice_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+			statement = conn.prepareCall("{call pr_insert_invoice_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 			
 			statement.registerOutParameter(1, java.sql.Types.BIGINT);
 			statement.setLong(1, 1);
-			statement.setString(2,uuid.toString());
-			statement.setTimestamp(3, null);
+			statement.setString(2,UUID.randomUUID().toString());
+			statement.setTimestamp(3, new Timestamp(today.getTime()));
 			//statement.setTimestamp(3, convertStringToTimestamp(doc.getElementsByTagName("tns:DatumVrijeme").item(0).getFirstChild().getNodeValue()));
 			statement.setTimestamp(4, new Timestamp(today.getTime()));
 			statement.setTimestamp(5, new Timestamp(today.getTime()));
@@ -85,6 +102,7 @@ public class InsertInvoice {
 	    	statement.setString(24, doc.getElementsByTagName("tns:SpecNamj").item(0).getFirstChild().getNodeValue());
 	    	statement.setString(25,null);
 	    	statement.setString(26,null);
+	    	statement.setString(27,xml);
 	    	
 	    	boolean result = statement.execute();
 	    	
@@ -100,6 +118,8 @@ public class InsertInvoice {
 		    	        }
 		    	    }
 	    	//}
+		    	 
+		    	 responseXml = util.createResponse(statement.getInt(1));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -112,107 +132,11 @@ public class InsertInvoice {
 			}
 			catch(Exception e) {}
 		}
+		
+		return responseXml;
 	}
 	
 	
-public void InsertIntoInvoiceV1(Document doc, Connection conn) {
-		
-		CallableStatement statement = null;
-		
-		UUID uuid = UUID.randomUUID();
-		Date today = new Date();
-		int id;
-		
-		try {
-			statement = conn.prepareCall("{call PR_INSERT_INVOICE_DATA_V1(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-			
-			statement.registerOutParameter(1, java.sql.Types.BIGINT);
-			statement.setLong(1, 1);
-			statement.setString(2,uuid.toString());
-			statement.setTimestamp(3, null);
-			//statement.setTimestamp(3, convertStringToTimestamp(doc.getElementsByTagName("tns:DatumVrijeme").item(0).getFirstChild().getNodeValue()));
-			statement.setTimestamp(4, new Timestamp(today.getTime()));
-			statement.setTimestamp(5, new Timestamp(today.getTime()));
-			statement.setTimestamp(6, new Timestamp(today.getTime()));
-			statement.setString(7, doc.getElementsByTagName("tns:Oib").item(0).getFirstChild().getNodeValue());
-			statement.setString(8,null);
-			statement.setInt(9, doc.getElementsByTagName("tns:USustPdv").item(0).getFirstChild().getNodeValue().equalsIgnoreCase("true") ? 1 : 0);
-	    	statement.setString(10, doc.getElementsByTagName("tns:OznSlijed").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(11, doc.getElementsByTagName("tns:BrOznRac").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(12, doc.getElementsByTagName("tns:OznPosPr").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(13, doc.getElementsByTagName("tns:OznNapUr").item(0).getFirstChild().getNodeValue());
-	    		    	
-	    	statement.setDouble(14, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(15, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(16, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(17, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(18, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(19, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(20, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(21, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(22, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(23, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(24, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(25, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(26, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(27, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(28, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(29, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(30, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(31, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setString(32, doc.getElementsByTagName("tns:Naziv").item(0).getFirstChild().getNodeValue());
-	    	statement.setDouble(33, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(34, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(35, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setString(36, doc.getElementsByTagName("tns:Naziv").item(0).getFirstChild().getNodeValue());
-	    	statement.setDouble(37, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(38, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(39, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setString(40, doc.getElementsByTagName("tns:Naziv").item(0).getFirstChild().getNodeValue());
-	    	statement.setDouble(41, Double.parseDouble(doc.getElementsByTagName("tns:Stopa").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(42, Double.parseDouble(doc.getElementsByTagName("tns:Osnovica").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(43, Double.parseDouble(doc.getElementsByTagName("tns:Iznos").item(0).getFirstChild().getNodeValue()));
-	    	statement.setString(44, null);
-	    	statement.setDouble(45, 0);
-	    	statement.setString(46, null);
-	    	statement.setDouble(47, 0);
-	    	statement.setString(48, null);
-	    	statement.setDouble(49, 0);
-	    	
-	    	statement.setDouble(50, Double.parseDouble(doc.getElementsByTagName("tns:IznosOslobPdv").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(51, Double.parseDouble(doc.getElementsByTagName("tns:IznosMarza").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(52, Double.parseDouble(doc.getElementsByTagName("tns:IznosNePodlOpor").item(0).getFirstChild().getNodeValue()));
-	    	statement.setDouble(53, Double.parseDouble(doc.getElementsByTagName("tns:IznosUkupno").item(0).getFirstChild().getNodeValue()));
-	    	statement.setString(54, "HRK");
-	    	statement.setString(55, doc.getElementsByTagName("tns:NacinPlac").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(56, doc.getElementsByTagName("tns:OibOper").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(57, doc.getElementsByTagName("tns:ZastKod").item(0).getFirstChild().getNodeValue());
-	    	statement.setInt(58, doc.getElementsByTagName("tns:NakDost").item(0).getFirstChild().getNodeValue().equalsIgnoreCase("true") ? 1 : 0);
-	    	statement.setString(59, doc.getElementsByTagName("tns:ParagonBrRac").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(60, doc.getElementsByTagName("tns:SpecNamj").item(0).getFirstChild().getNodeValue());
-	    	statement.setString(61,null);
-	    	statement.setString(62,null);
-	    	
-	    	boolean result = statement.execute();
-	    	
-	    	if(result) {
-	    		id = statement.getInt(1);
-	    	}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				if(statement!=null)
-					statement.close();
-			}
-			catch(Exception e) {}
-		}
-	}
-
-
 public void insertIntoInvoiceItems(int invoiceId, NodeList nodeList, Connection conn) {
 	
 	CallableStatement statement = null;

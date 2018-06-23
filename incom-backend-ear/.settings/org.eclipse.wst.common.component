@@ -8,7 +8,16 @@
         <dependent-module archiveName="incom-base-0.0.1-SNAPSHOT.jar" deploy-path="/lib" handle="module:/resource/incom-base/incom-base">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="incom-shared-0.0.1-SNAPSHOT.jar" deploy-path="/lib" handle="module:/resource/incom-shared/incom-shared">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="incom-service-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/incom-service/incom-service">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-1.2.17.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.7.25.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

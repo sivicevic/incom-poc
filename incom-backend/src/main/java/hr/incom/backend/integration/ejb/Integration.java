@@ -11,9 +11,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
-import hr.incom.backend.helper.DigitalSignatureVerify;
 import hr.incom.backend.information.IInformation;
-import hr.incom.backend.integration.ejb.interfaces.IIntegration;
+import hr.incom.shared.helper.DigitalSignatureVerify;
+import hr.incom.shared.integration.ejb.interfaces.IIntegration;
 
 @Stateless
 @LocalBean
@@ -72,6 +72,7 @@ public class Integration implements IIntegration
 		{
 			throw new Exception("Unable to validate file");
 		}
+		System.out.println("Validation: " + isValid);
 		return String.valueOf(isValid);
 	}
 
