@@ -9,9 +9,17 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.UUID;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.codehaus.jackson.map.ext.DOMDeserializer.NodeDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -25,6 +33,7 @@ public class InsertInvoiceFlat {
 	private static InsertInvoiceFlat instance;
 	
 	private Connection conn;
+	private static final Logger LOG = LoggerFactory.getLogger(InsertInvoiceFlat.class);
 	
 	public static InsertInvoiceFlat getInstance() {
 	    if(instance == null) {
@@ -38,22 +47,34 @@ public class InsertInvoiceFlat {
 	}
 	
 	private InsertInvoiceFlat() {
+		try {
+			this.conn = this.prepareConnectionPool();
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/*private InsertInvoiceFlat() {
 		this.conn = this.prepareConnection();
 	}
-
+*/
 	public Connection prepareConnection() {
 		Connection conn = null;
-		System.out.println("Prepare connection - flat!");
-		String URL = "jdbc:oracle:thin:@ed2s-scan.osc.uk.oracle.com:1521/pdb1";
-		String USER = "TRN_V1";
-		String PASS = "welcome1";
+		LOG.debug("Prepare connection - flat!");
+		String URL = "jdbc:oracle:thin:@localhost:1521/ora.incom";
+		String USER = "opr";
+		String PASS = "Salekoliko1";
 		
 				
 		try {
 			   Class.forName("oracle.jdbc.driver.OracleDriver");
 			}
 			catch(ClassNotFoundException ex) {
-			   System.out.println("Error: unable to load driver class!");
+			   LOG.debug("Error: unable to load driver class!");
 			   System.exit(1);
 			}
 		try {
@@ -62,6 +83,20 @@ public class InsertInvoiceFlat {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return conn;
+	 }
+	
+	public Connection prepareConnectionPool() throws NamingException, SQLException {
+		Connection conn = null;
+		System.out.println("Prepare connection pool - flat!");
+		Hashtable<String, String> ht = new Hashtable<String, String>();
+        ht.put(Context.INITIAL_CONTEXT_FACTORY,   "weblogic.jndi.WLInitialContextFactory");
+        ht.put(Context.PROVIDER_URL, "t3://localhost:7001");
+        
+		Context initialContext = new InitialContext(ht);
+		DataSource ds = (DataSource) initialContext.lookup("localV1");
+		conn = ds.getConnection();
+	
 		return conn;
 	 }
 	
@@ -74,7 +109,8 @@ public String InsertIntoInvoice(Document doc, String xml) {
 		int id;
 		
 		try {
-			statement = conn.prepareCall("{call PR_INSERT_INVOICE_DATA(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+			statement = this.conn.prepareCall("{call PR_INSERT_INVOICE_DATA(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+			
 			
 			statement.registerOutParameter(1, java.sql.Types.BIGINT);
 			statement.setLong(1, 1);
@@ -144,9 +180,14 @@ public String InsertIntoInvoice(Document doc, String xml) {
 	    	statement.setString(62,null);
 	    	statement.setString(63,xml);
 	    	
-	    	boolean result = statement.execute();
-	    	
-	    	responseXml = util.createResponse(statement.getInt(1));
+	    	int result = statement.executeUpdate();
+
+	    	if (result==1) {
+	    		responseXml = util.createResponse(statement.getInt(1));
+	    	}
+	    	else {
+    			LOG.info("Unable to execute procedure! Invoice id: " + statement.getInt(1));
+    		}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -163,20 +204,4 @@ public String InsertIntoInvoice(Document doc, String xml) {
 		return responseXml;
 	}
 
-	private static Timestamp convertStringToTimestamp(String time) { 
-		Date dateTime = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-		
-		try {
-			dateTime = formatter.parse(time);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return new Timestamp(dateTime.getTime());
-	}
-	
-	
-	
 }

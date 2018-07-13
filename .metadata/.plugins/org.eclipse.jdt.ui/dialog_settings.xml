@@ -108,6 +108,8 @@
 		<item value="3" key="pageIndex"/>
 	</section>
 	<section name="completion_proposal_size">
+		<item value="436" key="size.y"/>
+		<item value="657" key="size.x"/>
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>

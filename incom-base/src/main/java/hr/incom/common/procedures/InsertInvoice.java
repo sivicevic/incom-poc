@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.codehaus.jackson.map.ext.DOMDeserializer.NodeDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,6 +26,7 @@ public class InsertInvoice {
 	private static InsertInvoice instance;
 	
 	private Connection conn;
+	private static final Logger LOG = LoggerFactory.getLogger(InsertInvoice.class);
 	
 	public static InsertInvoice getInstance() {
 	    if(instance == null) {
@@ -42,7 +45,7 @@ public class InsertInvoice {
 
 	public Connection prepareConnection() {
 		Connection conn = null;
-		System.out.println("Prepare connection!");
+		LOG.debug("Prepare connection!");
 		String URL = "jdbc:oracle:thin:@ed2s-scan.osc.uk.oracle.com:1521/pdb1";
 		String USER = "TRN_V2";
 		String PASS = "welcome1";
@@ -51,7 +54,7 @@ public class InsertInvoice {
 			   Class.forName("oracle.jdbc.driver.OracleDriver");
 			}
 			catch(ClassNotFoundException ex) {
-			   System.out.println("Error: unable to load driver class!");
+			   LOG.info("Error: unable to load driver class!");
 			   System.exit(1);
 			}
 		try {
@@ -104,9 +107,9 @@ public class InsertInvoice {
 	    	statement.setString(26,null);
 	    	statement.setString(27,xml);
 	    	
-	    	boolean result = statement.execute();
+	    	int result = statement.executeUpdate();
 	    	
-	    	//if(result) {
+	    	if (result==1) {
 	    		id = statement.getInt(1);
 
 		    	NodeList nodeList = doc.getElementsByTagName("tns:Porez").item(0).getChildNodes();
@@ -117,9 +120,13 @@ public class InsertInvoice {
 		    	            insertIntoInvoiceItems(id, nodeList, conn);		    	            
 		    	        }
 		    	    }
-	    	//}
-		    	 
-		    	 responseXml = util.createResponse(statement.getInt(1));
+	    	
+		    	 responseXml = util.createResponse(id);
+		    	}
+	    		else {
+	    			LOG.info("Unable to execute procedure! Invoice id: " + statement.getInt(1));
+	    		}
+	    	
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -189,22 +196,5 @@ public void insertIntoInvoiceItems(int invoiceId, NodeList nodeList, Connection 
 		catch(Exception e) {}
 	}
 }
-	
-	
-	private static Timestamp convertStringToTimestamp(String time) { 
-		Date dateTime = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-		
-		try {
-			dateTime = formatter.parse(time);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return new Timestamp(dateTime.getTime());
-	}
-	
-	
 	
 }

@@ -38,12 +38,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 
 public class DigitalSignatureGenerate {
 
+	private static final Logger LOG = LoggerFactory.getLogger(DigitalSignatureGenerate.class);
     /**
      * Method used to get the XML document by parsing
      *
@@ -107,7 +111,7 @@ public class DigitalSignatureGenerate {
         } catch (TransformerException ex) {
             ex.printStackTrace();
         }
-        System.out.println("XML file with attached digital signature generated successfully ...");
+        LOG.debug("XML file with attached digital signature generated successfully ...");
     }
 
     /**

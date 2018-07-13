@@ -2,6 +2,7 @@ package hr.incom.service.rest;
 
 import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import javax.naming.NamingException;
 import javax.ws.rs.GET;
@@ -24,7 +25,8 @@ import hr.incom.shared.helper.RestUtil;
 
 @Path("/fiskal")
 public class IntegrationRestWS implements IIntegrationRestWS {
-
+	
+	private static final Logger LOG = LoggerFactory.getLogger(RestUtil.class);
 	RestUtil utils = new RestUtil();
 
 	Integration integration = new Integration();
@@ -41,6 +43,7 @@ public class IntegrationRestWS implements IIntegrationRestWS {
 			transactionTime = transactionTime + utils.processMessage("xml", i);
 		}
 		System.out.println(transactionTime);
+		LOG.info("Transaction time:" + transactionTime);
 		return transactionTime;
 	}
 
@@ -53,66 +56,149 @@ public class IntegrationRestWS implements IIntegrationRestWS {
 			utils.createInvoices("xml", i);
 		}
 		System.out.println(transactionTime);
+		LOG.info("Transaction time:" + transactionTime);
 		return transactionTime;
 	}
 
 	@POST
-	@Path("/postXmlToFlat")
-	public String restPostXMLFlat(String xml) throws NamingException, SQLException {
-
+	@Path("/postXmlToFlatXml")
+	public String restPostXMLFlatXml(String xml) throws NamingException, SQLException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
 		InsertInvoiceFlat insertFlat = InsertInvoiceFlat.getInstance();
-
+		long transactionTime = 0;
+		LocalDateTime pocetak = LocalDateTime.now();
+		String jir = "";
 		try {
 			Document doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes()));
 			String result = integration.processInvoice(doc);
-
+			//LOG.info("After process invoice" + result);
+			
 			if (StringUtils.equals(result, "true")) {
+				LOG.info("Prepare to insert into DB...");
 				String responseFile = insertFlat.InsertIntoInvoice(doc, xml);
 
 				if (!responseFile.equals("")) {
-					String jir = utils.validateResponseXml(responseFile);
-					// LOG.info(jir);
-					System.out.println(jir);
+					LOG.info("****Prepare JIR for: " + responseFile);
+					jir = utils.validateResponseXml(responseFile);
+					LOG.info("JIR: " + jir);
 				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// LOG.info("End of service call for flat invoice!");
-		return "End of service call for flat invoice!";
+		transactionTime = utils.measureTimeInMilis(pocetak);
+		LOG.info("Transaction time: " + transactionTime + "ms");
+
+		LOG.info("***** End of service call for flat invoice! JIR: "+jir+" *****");
+		return "End of service call for flat invoice! JIR: " + jir;
 	}
-
+	
 	@POST
-	@Path("/postXmlInvoice")
-	public String restPostXMLInvoice(String xml) {
-
+	@Path("/postXmlToFlatNOXml")
+	public String restPostXMLFlatNOXml(String xml) throws NamingException, SQLException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
-		InsertInvoice insert = InsertInvoice.getInstance();
-
+		InsertInvoiceFlat insertFlat = InsertInvoiceFlat.getInstance();
+		long transactionTime = 0;
+		LocalDateTime pocetak = LocalDateTime.now();
+		String jir = "";
 		try {
 			Document doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes()));
 			String result = integration.processInvoice(doc);
-			System.out.println("After process invoice" + result);
+			//LOG.info("After process invoice" + result);
 
 			if (StringUtils.equals(result, "true")) {
-				String responseFile = insert.InsertIntoInvoice(doc, xml);
+				LOG.info("Prepare to insert into DB...");
+				String responseFile = insertFlat.InsertIntoInvoice(doc, null);
 
 				if (!responseFile.equals("")) {
-					String jir = utils.validateResponseXml(responseFile);
-					// LOG.info(jir);
-					System.out.println(jir);
+					LOG.info("****Prepare JIR for: " + responseFile);
+					jir = utils.validateResponseXml(responseFile);
+					LOG.info("JIR: " + jir);
 				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// LOG.info("End of service call for flat invoice!");
-		return "End of service call for invoice and invoice items!";
+		transactionTime = utils.measureTimeInMilis(pocetak);
+		LOG.info("Transaction time: " + transactionTime + "ms");
+		
+		LOG.info("***** End of service call for flat invoice! JIR: "+jir+" *****");
+		return "End of service call for flat invoice! JIR: " + jir;
+	}
+
+	
+	@POST
+	@Path("/postXmlInvoiceXml")
+	public String restPostXMLInvoiceXml(String xml) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		InsertInvoice insert = InsertInvoice.getInstance();
+		long transactionTime = 0;
+		LocalDateTime pocetak = LocalDateTime.now();
+		String jir = "";
+		try {
+			Document doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes()));
+			String result = integration.processInvoice(doc);
+			//LOG.info("After process invoice" + result);
+
+			if (StringUtils.equals(result, "true")) {
+				LOG.info("Prepare to insert into DB...");
+				String responseFile = insert.InsertIntoInvoice(doc, xml);
+
+				if (!responseFile.equals("")) {
+					LOG.info("****Prepare JIR for: " + responseFile);
+					jir = utils.validateResponseXml(responseFile);
+					LOG.info("JIR: " + jir);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		transactionTime = utils.measureTimeInMilis(pocetak);
+		LOG.info("Transaction time: " + transactionTime + "ms");
+		
+		LOG.info("***** End of service call for invoice and invoice items! JIR: "+jir+" *****");
+		return "End of service call for invoice and invoice items!" + jir;
+	}
+	
+	@POST
+	@Path("/postXmlInvoiceNOXml")
+	public String restPostXMLInvoiceNOXml(String xml) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		InsertInvoice insert = InsertInvoice.getInstance();
+		long transactionTime = 0;
+		LocalDateTime pocetak = LocalDateTime.now();
+		String jir = "";
+		try {
+			Document doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes()));
+			String result = integration.processInvoice(doc);
+			//LOG.info("After process invoice" + result);
+
+			if (StringUtils.equals(result, "true")) {
+				LOG.info("Prepare to insert into DB...");
+				String responseFile = insert.InsertIntoInvoice(doc, null);
+
+				if (!responseFile.equals("")) {
+					LOG.info("****Prepare JIR for: " + responseFile);
+					jir = utils.validateResponseXml(responseFile);
+					LOG.info("JIR: " + jir);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		transactionTime = utils.measureTimeInMilis(pocetak);
+		LOG.info("Transaction time: " + transactionTime + "ms");
+		
+		LOG.info("***** End of service call for invoice and invoice items! JIR: "+jir+" *****");
+		return "End of service call for invoice and invoice items!" + jir;
 	}
 
 }

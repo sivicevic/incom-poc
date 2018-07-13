@@ -9,10 +9,13 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import hr.incom.backend.information.IInformation;
 import hr.incom.shared.helper.DigitalSignatureVerify;
+import hr.incom.shared.helper.RestUtil;
 import hr.incom.shared.integration.ejb.interfaces.IIntegration;
 
 @Stateless
@@ -25,6 +28,8 @@ public class Integration implements IIntegration
 	public static final String DESTINATION_FILE_PATH = "./tmp/fiskalFiles/signed/";
 	public static final String DESTINATION_FILE_PATH2 = "./tmp/fiskalFiles/signed2/";
 	public static final String KEYS_PATH = "./tmp/keys/";
+	
+	private static final Logger LOG = LoggerFactory.getLogger(Integration.class);
 
 	@Override
 	public String processCashPayment(String message) throws Exception
@@ -72,7 +77,8 @@ public class Integration implements IIntegration
 		{
 			throw new Exception("Unable to validate file");
 		}
-		System.out.println("Validation: " + isValid);
+		//System.out.println("Validation: " + isValid);
+		LOG.info("Validation for invoice: " + doc.getElementsByTagName("tns:IdPoruke").item(0).getFirstChild().getNodeValue() + " is - " + isValid);
 		return String.valueOf(isValid);
 	}
 

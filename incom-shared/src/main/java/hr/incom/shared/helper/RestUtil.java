@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,7 +39,7 @@ public class RestUtil {
 	public static final String RESPONSE_FILE_PATH = "./tmp/fiskalFiles/response/";
 	public static final String DESTINATION_FILE_PATH_RESPONSE = "./tmp/fiskalFiles/response/signed/";
 	
-	//private static final Logger LOG = LoggerFactory.getLogger(RestUtil.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RestUtil.class);
 	
 	DigitalSignatureGenerate generateSignature = new DigitalSignatureGenerate();
 	
@@ -116,7 +117,7 @@ public class RestUtil {
 		String fullPathDestination = DESTINATION_FILE_PATH_RESPONSE + fileName;
 		String privateKeyPath = KEYS_PATH + "privatekey.key";
 		String publicKeyPath = KEYS_PATH + "publickey.key";
-		System.out.println(fileName);
+		LOG.info("Response filename: " + fileName);
 		generateSignature.generateXMLDigitalSignature(fullPathOrigin, fullPathDestination, privateKeyPath, publicKeyPath);
 		
 		return fullPathDestination;
@@ -138,6 +139,7 @@ public class RestUtil {
 			}
 			else {
 				jir = "INVALID";
+				LOG.info("JIR INVALID!!!");
 			}
 			
 		} catch (Exception e) {
@@ -186,9 +188,11 @@ public class RestUtil {
 
     	if (StringUtils.equals(response, "true")) {
     		//information.prepareInsertFromString(fullPathDestination);
+    		LOG.info("Success validation!");
     		return Response.status(200).entity("Success!").build();
     	}
     	else {
+    		LOG.info("Validation failed!");
     		return Response.status(500).entity("Validation failed!").build();
     	}
 	}
@@ -250,7 +254,8 @@ public class RestUtil {
 		
 	    File f = new File(workingDir + "/signed" + "/Invoice-" + i + ".xml");
 	    
-	    System.out.println("File: " + f.toString());
+	    //System.out.println("File: " + f.toString());
+	    //LOG.info("File: " + f.toString());
 	    
 	      if (f.isFile() && getFileExtensionName(f).indexOf("xml") != -1) {
 	    	  return generateSignature.getXmlDocument(f.toString());

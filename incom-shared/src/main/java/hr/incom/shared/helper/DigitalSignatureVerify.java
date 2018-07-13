@@ -60,7 +60,7 @@ public class DigitalSignatureVerify
         XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
         XMLSignature signature = fac.unmarshalXMLSignature(valContext);
 	validFlag = signature.validate(valContext);
-		LOG.info("File: " + signedXmlFilePath + " is " + validFlag);
+		LOG.debug("File: " + signedXmlFilePath + " is " + validFlag);
         return validFlag;
     }
     
